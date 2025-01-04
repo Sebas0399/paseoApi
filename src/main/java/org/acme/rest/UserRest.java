@@ -1,6 +1,5 @@
 package org.acme.rest;
 
-import org.acme.repo.UserRepo;
 import org.acme.repo.Entity.User;
 
 import jakarta.inject.Inject;
@@ -12,27 +11,23 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.Response;
+import org.acme.service.PaseoService;
+import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
 
 @Path("/user")
 @Produces("application/json")
 @Consumes("application/json")
 public class UserRest {
-    @Inject
-    UserRepo userRepo;
 
-    @POST
-    public Response create(User user) {
-        return Response.ok(userRepo.create(user)).build();
-    }
+
 
     @GET
     public Response list() {
-        return Response.ok(userRepo.list()).build();
+        return Response.ok(User.listAll()).build();
+    }
+    @POST
+    public Response create(@RequestBody User user){
+        return Response.ok(User.insert(user)).build();
     }
 
-    @DELETE
-    @Path("/{id}")
-    public Response delete(@PathParam("id") String id) {
-        return Response.ok(userRepo.delete(id)).build();
-    }
 }
